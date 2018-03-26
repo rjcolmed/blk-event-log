@@ -4,6 +4,9 @@ const express = require('express')
 const app = express()
 const axios = require('axios')
 
+app.set('view engine', 'ejs')
+app.use(express.static('public'))
+
 const port = process.env.port || '3002'
 
 //VARIABLES
@@ -32,9 +35,13 @@ app.get('/', (req, res) => {
     .then(response => {
       const bldg = response.data.Buildings[0]
 
+      console.log(deviceDetails)
+
       const occupanciesPath = `/Buildings/${bldg.Id}/Occupancies?u=${username}&p=${password}&l=${bldg.LoginId}&d=${deviceId}&format=json`
       const eventTypesPath = `/Buildings/${bldg.Id}/EventLogTypes?u=${username}&p=${password}&l=${bldg.LoginId}&d=${deviceId}&format=json`
       const eventsPath = `/Buildings/${bldg.Id}/Events?u=${username}&p=${password}&l=${bldg.LoginId}&d=${deviceId}&format=json`
+
+      console.log(bldg.DeviceStatus)
 
     return axios.get(`${baseUrl}${eventsPath}`)
     .then(allEvents => {
@@ -94,18 +101,13 @@ app.get('/', (req, res) => {
       })
       .catch(err => console.log(err))
     })
-    .catch(err => {
-      console.log(err)
-      // const authDevicePath = `/Auth?u=${username}&p=${password}&l=${bldg.LoginId}&format=json`
-
-      // axios.post(`${baseUrl}${authDevicePath}`, deviceDetails)
-      // .then(newDeviceDetails => {
-      //   console.log(newDeviceDetails.data)
-      // })
-      // .catch(err => console.log('Authorization of device failed:', err))
-      })
+    .catch(err => console.log(err))
   })
   .catch(err => console.log(err))
+})
+
+app.get('/auth', (req, res) => {
+  res.render('index.html')
 })
 
 app.get('/api/events', (req, res) => {
