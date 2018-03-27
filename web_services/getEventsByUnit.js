@@ -21,8 +21,8 @@ module.exports = (baseUrl, eventsPath, occupanciesPath, eventTypesPath, res, app
             }
           })
         })
-
-        return newEventsList
+        
+        return newEventsList.filter(event => event.Number )
       })
       .then(newUnitEventsList => {
         axios.get(`${baseUrl}${eventTypesPath}`)
@@ -34,8 +34,10 @@ module.exports = (baseUrl, eventsPath, occupanciesPath, eventTypesPath, res, app
               }
             })
           })
-
-          return newUnitEventsList
+  
+          return [...newUnitEventsList].sort((a, b) => {
+            return a.Number.localeCompare(b.Number)
+          })
         })
         .then(newUnitEventsTypesList => {
           return newUnitEventsTypesList.reduce((acc, nextEvent) => {
@@ -53,7 +55,14 @@ module.exports = (baseUrl, eventsPath, occupanciesPath, eventTypesPath, res, app
           }, {})
         })
         .then(eventsByUnit => {
-          app.locals.events = eventsByUnit
+          const groupedEvents = []
+
+          for (const key in eventsByUnit) {
+            if ( eventsByUnit.hasOwnProperty(key) ) {
+              groupedEvents.push(eventsByUnit[key])
+            }
+          }
+          app.locals.events = groupedEvents
           res.send('Events ready to be consumed at /api/events')
         })
       })
