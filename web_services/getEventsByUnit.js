@@ -22,12 +22,12 @@ module.exports = (baseUrl, eventsPath, occupanciesPath, eventTypesPath, res, app
           })
         })
 
-        return newEventsList.filter(event => event.Number )
+        return newEventsList.filter(event => event.Number ) //filter out events whose unot/apt number is undefined
       })
       .then(newUnitEventsList => {
-        
         return newUnitEventsList.map(el => el.Number)
           .filter((num, idx, arr) => arr.indexOf(num) === idx)
+          .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
           .map(aptNum => {
             return {
               'Apartment': aptNum,
