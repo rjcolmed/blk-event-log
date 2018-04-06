@@ -2,7 +2,7 @@ const axios = require('axios')
 const getEventsByUnit = require('./getEventsByUnit')
 
 module.exports = (baseUrl, req, res, app) => {
-    console.log(req.body)
+   
     const username = req.body.username
     const password = req.body.password
     const deviceId = req.body.deviceId
@@ -24,6 +24,7 @@ module.exports = (baseUrl, req, res, app) => {
         const bldg = response.data.Buildings[0]
 
         const occupanciesPath = `/Buildings/${bldg.Id}/Occupancies?u=${username}&p=${password}&l=${bldg.LoginId}&d=${deviceId}&format=json`
+        const unitsPath = `/Buildings/${bldg.Id}/PhysicalUnits?u=${username}&p=${password}&l=${bldg.loginId}&d=${deviceId}&format=json`
         const eventTypesPath = `/Buildings/${bldg.Id}/EventLogTypes?u=${username}&p=${password}&l=${bldg.LoginId}&d=${deviceId}&format=json`
         const eventsPath = `/Buildings/${bldg.Id}/Events?u=${username}&p=${password}&l=${bldg.LoginId}&d=${deviceId}&format=json`
 
