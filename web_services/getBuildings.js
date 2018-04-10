@@ -2,7 +2,7 @@ const axios = require('axios')
 const getEventsByUnit = require('./getEventsByUnit')
 
 module.exports = (baseUrl, req, res, app) => {
-   
+
     const username = req.body.username
     const password = req.body.password
     const deviceId = req.body.deviceId

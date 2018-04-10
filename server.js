@@ -7,11 +7,18 @@ const axios = require('axios')
 const getEventsByUnit = require('./web_services/getEventsByUnit')
 const getBuildings = require('./web_services/getBuildings')
 const cors = require('cors')
+const session = require('express-session')
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
+app.use(session({
+  secret: 'secret-buildinglink',
+  cookie: {
+    maxAge: 60000
+  }
+}))
 
 const port = process.env.port || '3002'
 const baseUrl = process.env.BASE_URL
