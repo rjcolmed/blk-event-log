@@ -14,7 +14,9 @@ module.exports = (baseUrl, eventsPath, occupanciesPath, eventTypesPath, res, app
     })
     .then(justIdsAndNumbers => {
       axios.get(`${baseUrl}${eventsPath}`)
+
         .then(allEvents => {
+          console.log(allEvents)
           justIdsAndNumbers.forEach(idAndNumber => {
             return allEvents.data.forEach(event => {
               if ( idAndNumber.Id === event.OccupancyId ) {
